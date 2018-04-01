@@ -15,6 +15,8 @@ config = configparser.ConfigParser()
 config.read('config.ini')
 connection_string = config['database']['postgres_connection']
 
+# Tommy was here
+
 #  You may use this in seed_database.  The function reads the CSV files
 #  and returns a list of lists.  The first list is a list of classes,
 #  the secode list is a list of ships.
@@ -31,8 +33,8 @@ def load_seed_data():
         for row in spamreader:
             ships.append(row)
     #print(ships)
-    #return [classes, ships]
-    return ships
+    return [classes, ships]
+    #return ships
 
 
 def seed_database():
@@ -139,27 +141,66 @@ cur.execute("CREATE TABLE IF NOT EXISTS Ships (Name  varchar(20), Class varchar(
 # ("California","Tennessee",1921))
    #            "INSERT INTO test (num, data) VALUES (%s, %s)",
 #      (100, "abc'def")
-           
+#"CREATE TABLE IF NOT EXISTS Ships (Name  varchar(20), Class varchar(20),  Launched smallint);"
+sqlstring="CREATE TABLE IF NOT EXISTS Classes(Class varchar(20)  PRIMARY KEY, Type varchar(2), Country  varchar(20 ) ,"
+"NumGuns  Integer,Bore real, Displacement real );"    
+#(Class varchar(20)  PRIMARY KEY, Type varchar(2), Country  varchar(20 ) ,"+
+#"NumGuns  Integer,"+
+#"Bore real,"+
+#"Displacement real, );"     
+print(sqlstring)  
 #conn.commit()
+#cur.execute(sqlstring)
+classes_and_ships=load_seed_data()
+# print("******* print all *********")
+# print (classes_and_ships)
+# print("******************************")
+ship_list = classes_and_ships[1]
+# print("******* print 0 items *********")
+# print(classes_and_ships[0])
+# print("******* print 1 items *********")
+# print(classes_and_ships[1])
+class_list = classes_and_ships[0]
+# cur.execute("INSERT INTO (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
+#     (shipsret))
+#cur.execute("INSERT INTO ships (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
+#('test','test2', 1560))
 
-shipsret=load_seed_data()
+for ship in ship_list:
+#     print (ship[0] + ',' + ship[1] + ',' +ship[2])
+    print (ship)
+#print(shipsret)
+   # cur.execute("INSERT INTO (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
+    #(ship)ships[0],ships[1],ships[2])
+   # cur.execute("INSERT INTO (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
+    #(ship[0],ship[1],ship[2])) 
+    cur.execute("INSERT INTO ships (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
+    (ship))
+           
+classesret=load_seed_data()
 # print (shipsret)
 # cur.execute("INSERT INTO (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
 #     (shipsret))
 #cur.execute("INSERT INTO ships (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
 #('test','test2', 1560))
 
-for ship in shipsret:
+for clas in classesret:
 #     print (ship[0] + ',' + ship[1] + ',' +ship[2])
-#     print (ship)
+    print (clas)
 #print(shipsret)
    # cur.execute("INSERT INTO (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
     #(ship)ships[0],ships[1],ships[2])
    # cur.execute("INSERT INTO (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
     #(ship[0],ship[1],ship[2]))
-    cur.execute("INSERT INTO ships (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
-    (ship))
-           
+
+
+    
+    cur.execute("INSERT INTO Class (Class,Type,Country,NumGuns, Bore ,Displacement)) VALUES (%s, %s, %s,%s, %s,%s)",
+
+    (clas))   
+    #cur.execute("INSERT INTO ships (Name  , Class  ,  Launched ) VALUES (%s, %s,%s)",
+    #(ship))
+                      
            
 conn.commit()
 
